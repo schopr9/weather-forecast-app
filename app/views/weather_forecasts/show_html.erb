@@ -1,0 +1,65 @@
+<% if @from_cache %>
+  <div class="cache-indicator">
+    📋 Data from cache (refreshed within 30 minutes)
+  </div>
+<% end %>
+
+<div class="weather-card">
+  <div class="current-weather">
+    <div>
+      <div class="temperature">
+        <%= @forecast_data.dig('current', 'temp_f')&.round(1) || 'N/A' %>°F
+      </div>
+      <div style="font-size: 1.2em; margin-top: 10px;">
+        <%= @forecast_data.dig('current', 'condition', 'text') || 'Unknown' %>
+      </div>
+      <div style="font-size: 1em; opacity: 0.9; margin-top: 5px;">
+        <%= @forecast_data.dig('location', 'name') %>, 
+        <%= @forecast_data.dig('location', 'region') %>
+      </div>
+    </div>
+    
+    <div class="weather-details">
+      <div style="margin-bottom: 10px;">
+        <strong>High:</strong> <%= @forecast_data.dig('forecast', 'forecastday', 0, 'day', 'maxtemp_f')&.round || 'N/A' %>°F
+      </div>
+      <div style="margin-bottom: 10px;">
+        <strong>Low:</strong> <%= @forecast_data.dig('forecast', 'forecastday', 0, 'day', 'mintemp_f')&.round || 'N/A' %>°F
+      </div>
+      <div style="margin-bottom: 10px;">
+        <strong>Humidity:</strong> <%= @forecast_data.dig('current', 'humidity') || 'N/A' %>%
+      </div>
+      <div>
+        <strong>Wind:</strong> <%= @forecast_data.dig('current', 'wind_mph') || 'N/A' %> mph
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="extended-forecast">
+  <h3 style="margin-bottom: 20px; color: #2d3436;">7-Day Forecast</h3>
+  
+  <% (@forecast_data.dig('forecast', 'forecastday') || []).each do |day| %>
+    <div class="forecast-day">
+      <div>
+        <strong><%= Date.parse(day['date']).strftime('%A, %B %d') %></strong>
+        <br>
+        <span style="color: #636e72;"><%= day.dig('day', 'condition', 'text') %></span>
+      </div>
+      
+      <div style="text-align: right;">
+        <div style="font-size: 1.1em;">
+          <span style="color: #e17055;"><%= day.dig('day', 'maxtemp_f')&.round %>°</span> / 
+          <span style="color: #74b9ff;"><%= day.dig('day', 'mintemp_f')&.round %>°</span>
+        </div>
+        <div style="font-size: 0.9em; color: #636e72;">
+          <%= day.dig('day', 'daily_chance_of_rain') %>% chance of rain
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div style="text-align: center; margin-top: 30px;">
+  <%= link_to "Search Another Location", root_path, class: "btn" %>
+</div>
