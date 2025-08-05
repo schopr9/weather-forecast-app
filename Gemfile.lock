@@ -126,8 +126,9 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.2.0)
-    httparty (0.20.0)
-      mime-types (~> 3.0)
+    httparty (0.23.1)
+      csv
+      mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
@@ -168,10 +169,6 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.3)
-    mime-types (3.7.0)
-      logger
-      mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0729)
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
@@ -422,7 +419,7 @@ DEPENDENCIES
   debug
   factory_bot_rails
   faker
-  httparty (~> 0.20.0)
+  httparty (~> 0.23.1)
   importmap-rails
   jbuilder
   kamal
