@@ -83,6 +83,67 @@
   <% end %>
 </div>
 
+<div class="weather-container">
+  <% if @forecast_data && @forecast_data.any? %>
+    <div class="extended-forecast">
+      <h3 style="margin-bottom: 20px; color: #2d3436;">7-Day Forecast</h3>
+      
+      <% (@forecast_data || []).each do |day| %>
+        <div class="forecast-day">
+          <div>
+            <strong><%= Date.parse(day['date']).strftime('%A, %B %d') %></strong>
+          </div>
+          
+          <div class="temperature-range">
+            <span class="high-temp"><%= day['high'].to_i %>°</span>
+            <span class="temp-separator">/</span>
+            <span class="low-temp"><%= day['low'].to_i %>°</span>
+            <span class="temp-unit"><%= day['temperature_unit'] %></span>
+          </div>
+          
+          <div class="day-night-conditions">
+            <div class="day-condition">
+              <div class="condition-header">Day</div>
+              <div class="condition-info">
+                <span class="condition-text"><%= day['day_condition'] %></span>
+                <% if day['day_has_precipitation'] %>
+                  <span class="precipitation-info">
+                    (<%= day['day_precipitation_intensity'] %> <%= day['day_precipitation_type'] %>)
+                  </span>
+                <% end %>
+              </div>
+              <div class="weather-icon">
+                <!-- You can add weather icon based on day['day_icon'] -->
+                <span class="icon-placeholder">☀️</span>
+              </div>
+            </div>
+            
+            <div class="night-condition">
+              <div class="condition-header">Night</div>
+              <div class="condition-info">
+                <span class="condition-text"><%= day['night_condition'] %></span>
+                <% if day['night_has_precipitation'] %>
+                  <span class="precipitation-info">
+                    (<%= day['night_precipitation_intensity'] %> <%= day['night_precipitation_type'] %>)
+                  </span>
+                <% end %>
+              </div>
+              <div class="weather-icon">
+                <!-- You can add weather icon based on day['night_icon'] -->
+                <span class="icon-placeholder">🌙</span>
+              </div>
+            </div>
+          </div>          
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="no-forecast">
+      <p>No forecast data available. Please search for a location.</p>
+    </div>
+  <% end %>
+</div>
+
 <style>
 .weather-forecast-container {
   max-width: 800px;
@@ -329,7 +390,7 @@
 }
 
 .weather-icon {
-  font-size: 64px;
+  font-size: 20px;
   margin-bottom: 20px;
 }
 

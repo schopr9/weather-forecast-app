@@ -12,6 +12,7 @@ class WeatherForecastsController < ApplicationController
       flash.now[:alert] = 'Please enter a valid address'
       @weather_forecast = nil
       @from_cache = false
+      @forecast_data = nil
       render :index
       return
     end
@@ -23,10 +24,12 @@ class WeatherForecastsController < ApplicationController
       if cached_forecast
         @weather_forecast = cached_forecast
         @from_cache = true
+        @forecast_data = cached_forecast.extended_forecast_data
       else
         # Fetch new weather data
         @weather_forecast = fetch_weather_forecast(address)
         @from_cache = false
+        @forecast_data = @weather_forecast.extended_forecast_data
       end
       
       if @weather_forecast
@@ -36,20 +39,23 @@ class WeatherForecastsController < ApplicationController
         flash.now[:alert] = 'Unable to retrieve weather data for the specified address. Please try again.'
         @weather_forecast = nil
         @from_cache = false
+        @forecast_data = nil
         render :index
       end
       
-    rescue GeocodingService::WeatherError => e
+    rescue WeatherForecastService::WeatherError => e
       Rails.logger.error "Weather API error: #{e.message}"
       flash.now[:alert] = 'Weather service is currently unavailable. Please try again later.'
       @weather_forecast = nil
       @from_cache = false
+      @forecast_data = nil
       render :index
     rescue StandardError => e
       Rails.logger.error "Unexpected error in weather search: #{e.message}\n#{e.backtrace.join("\n")}"
       flash.now[:alert] = 'An unexpected error occurred. Please try again.'
       @weather_forecast = nil
       @from_cache = false
+      @forecast_data = nil
       render :index
     end
   end
@@ -79,14 +85,14 @@ class WeatherForecastsController < ApplicationController
   private
   
   def fetch_weather_forecast(address)
-    geocoding_service = GeocodingService.new
+    weather_forecast_service = WeatherForecastService.new
     
     # Get weather forecast data from AccuWeather
-    forecast_data = geocoding_service.get_weather_forecast(address)
+    forecast_data = weather_forecast_service.get_weather_forecast(address)
     return nil unless forecast_data
     
     # Also get coordinates for the address
-    coordinates = geocoding_service.geocode(address)
+    coordinates = weather_forecast_service.geocode(address)
     
     # Create and return the weather forecast record
     WeatherForecast.from_accuweather_response(forecast_data, coordinates)

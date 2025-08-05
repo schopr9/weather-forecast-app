@@ -1,10 +1,10 @@
-class GeocodingService < ApplicationService
+class WeatherForecastService < ApplicationService
   include HTTParty
   
-  API_KEY = ENV['WEATHER_API_KEY'] || 'mPkNtDtsBEdIO4uByPD9FkN7WajugW0r'
+  API_KEY = Rails.application.config.weather_api_key || 'mPkNtDtsBEdIO4uByPD9FkN7WajugW0r'
   BASE_URL = 'http://dataservice.accuweather.com'
   
-  class GeocodingError < StandardError; end
+  class WeatherForecastError < StandardError; end
   class WeatherError < StandardError; end
   
   def initialize

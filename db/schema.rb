@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_31_135651) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_01_164354) do
   create_table "weather_forecasts", force: :cascade do |t|
     t.string "address", limit: 500, null: false
     t.decimal "latitude", precision: 10, scale: 6
@@ -21,7 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_31_135651) do
     t.string "condition", limit: 100
     t.integer "humidity"
     t.float "wind_speed"
-    t.text "extended_forecast_data"
+    t.json "extended_forecast_data"
     t.datetime "forecast_retrieved_at"
     t.datetime "cached_until"
     t.datetime "created_at", null: false

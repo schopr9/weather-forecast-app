@@ -58,8 +58,8 @@ class WeatherForecast < ApplicationRecord
       longitude = coordinates[:lng]
     else
       # Try to geocode the address to get coordinates
-      geocoding_service = GeocodingService.new
-      coords = geocoding_service.geocode(forecast_data[:location])
+      weather_forecast_service = WeatherForecastService.new
+      coords = weather_forecast_service.geocode(forecast_data[:location])
       latitude = coords[:lat] if coords
       longitude = coords[:lng] if coords
     end

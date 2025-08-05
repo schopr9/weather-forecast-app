@@ -14,6 +14,9 @@ module WeatherForecastApp
     
     # Security configurations
     config.force_ssl = Rails.env.production?
+
+    # Weather API key configuration
+    config.weather_api_key = ENV['WEATHER_API_KEY']
     
     # Logging configuration for production monitoring
     if Rails.env.production?
