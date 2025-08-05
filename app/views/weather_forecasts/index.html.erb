@@ -86,8 +86,6 @@
 <div class="weather-container">
   <% if @forecast_data && @forecast_data.any? %>
     <div class="extended-forecast">
-      <h3 style="margin-bottom: 20px; color: #2d3436;">7-Day Forecast</h3>
-      
       <% (@forecast_data || []).each do |day| %>
         <div class="forecast-day">
           <div>
@@ -421,6 +419,9 @@
   
   .forecast-grid {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  .extended-forecast {
+    display: flex;
   }
 }
 </style>
